@@ -1,0 +1,7 @@
+const ADD_GLOBAL_ERROR = 'globalError/ADD_GLOBAL_ERROR';
+const REMOVE_GLOBAL_ERROR = 'globalError/REMOVE_GLOBAL_ERROR';
+
+export default {
+  ADD_GLOBAL_ERROR,
+  REMOVE_GLOBAL_ERROR
+};
