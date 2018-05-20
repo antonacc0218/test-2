@@ -1,5 +1,6 @@
 import api from './api';
 import types from './types';
+import { globalErrorActions } from 'state/ducks/globalError';
 
 const login = credentials => dispatch => {
   dispatch({ type: types.LOGIN_REQUEST });
@@ -11,11 +12,15 @@ const login = credentials => dispatch => {
         localStorage.setItem('userId', userId);
         dispatch({ type: types.LOGIN_SUCCESS, userId });
       } else if (data.status === 'err') {
-        dispatch({ type: types.LOGIN_FAILURE, error: data.message });
+        dispatch({ 
+          type: types.LOGIN_FAILURE, 
+          error: data.message === 'wrong_email_or_password' ? 
+            'Неверная электронная почта или пароль' : data.message 
+        })
       }      
     })
     .catch(error => {
-      console.error(error);
+      dispatch(globalErrorActions.addGlobalError(error.response.data))
     });
 };
 

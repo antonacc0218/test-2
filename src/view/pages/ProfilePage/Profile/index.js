@@ -13,19 +13,15 @@ function ucfirst(str) {
 }
 
 const Profile = ({ profileData: { city, languages, social } }) => {
-  const socialSorted = [];
-  //console.log(social);
+  let socialSorted = [];
   if (social) {
     social.forEach((socialItem, index) => {
-      ///console.log(socialItem);
       if (socialItem.label === 'web') {
         const webSocial = social.splice(index, 1);
-        console.log(socialSorted.concat(webSocial, social));
-        socialSorted.concat(webSocial, social);
+        socialSorted = [].concat(webSocial, social);
       }
     });
   }
-  //console.log(socialSorted);
   return(
     <Card>
       <CardImg
