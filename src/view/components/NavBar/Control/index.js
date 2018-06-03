@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from 'reactstrap';
+import PropTypes from 'prop-types';
 
 const Control = ({ isAuthenticated, logout }) => (
   isAuthenticated ? (
@@ -13,5 +14,10 @@ const Control = ({ isAuthenticated, logout }) => (
     </Link>
   )
 );
+
+Control.propTypes = {
+  isAuthenticated: PropTypes.bool.isRequired,
+  logout: PropTypes.func.isRequired
+};
 
 export default Control;

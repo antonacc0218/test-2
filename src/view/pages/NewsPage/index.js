@@ -6,10 +6,13 @@ import NewsList from './NewsList';
 import { Container, Row, Col } from 'reactstrap';
 import { connect } from 'react-redux';
 import { newsThunks, newsSelectors } from 'state/ducks/news';
-import { globalErrorSelectors } from 'state/ducks/globalError';
+import { globalErrorActions, globalErrorSelectors } from 'state/ducks/globalError';
 
 
 class NewsPage extends React.Component {
+  componentWillMount() {
+    this.props.resetGlobalError();
+  }
   componentDidMount() {
     this.props.fetchNews();
   }
@@ -47,4 +50,4 @@ const mapStateToProps = state => ({
   globalError: globalErrorSelectors.getGlobalError(state)
 });
 
-export default connect(mapStateToProps, {...newsThunks})(NewsPage);
+export default connect(mapStateToProps, {...newsThunks, ...globalErrorActions})(NewsPage);

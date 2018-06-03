@@ -1,28 +1,25 @@
 import api from './api';
-import types from './types';
-import { globalErrorActions } from 'state/ducks/globalError';
+import actions from './actions';
 import { values } from 'ramda';
+import errorTypes from "errorTypes";
 
 const fetchNews = () => (dispatch, getState) => {
   const newsAmount = getState().news.allIds.length;
   if (newsAmount === 2) {
-    return dispatch({ 
-      type: types.FETCH_NEWS_SUCCESS, 
-      news: values(getState().news.byIds) 
-    });
+    return dispatch(actions.fetchNewsSuccess(values(getState().news.byIds)));
   }
-  dispatch({ type: types.FETCH_NEWS_REQUEST });
+  dispatch(actions.fetchNewsRequest());
   return api.fetchNews()
     .then(response => {
       const { status, data } = response.data;
       if (status === 'ok') {
-        dispatch(globalErrorActions.removeGlobalError());
-        dispatch({ type: types.FETCH_NEWS_SUCCESS, news: data });
+        dispatch(actions.fetchNewsSuccess(data));
+      } else {
+        dispatch(actions.fetchNewsFailure(errorTypes.server_error));
       }
     })
-    .catch(error => {
-      dispatch({ type: types.FETCH_NEWS_FAILURE });
-      dispatch(globalErrorActions.addGlobalError(error.response.data));
+    .catch(() => {
+      dispatch(actions.fetchNewsFailure(errorTypes.server_error));
     });
 }
 

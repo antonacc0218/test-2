@@ -1,10 +1,9 @@
 import axios from 'axios';
-
-const URL = 'https://mysterious-reef-29460.herokuapp.com/api/v1/validate';
+import API_URL from 'API_URL';
 
 const api = {
   login(credentials) {
-    return axios.post(URL, credentials);
+    return axios.post(`${API_URL}/validate`, credentials);
   }
 };
 

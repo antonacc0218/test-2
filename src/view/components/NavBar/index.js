@@ -11,6 +11,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Control from './Control';
 import { authSelectors, authActions } from 'state/ducks/auth';
+import PropTypes from 'prop-types';
 
 class NavBar extends React.Component {
   constructor(props) {
@@ -56,6 +57,11 @@ class NavBar extends React.Component {
     );
   }
 }
+
+NavBar.propTypes = {
+  isAuthenticated: PropTypes.bool,
+  logout: PropTypes.func
+};
 
 const mapStateToProps = state => ({
   isAuthenticated: Boolean(authSelectors.getUserId(state))

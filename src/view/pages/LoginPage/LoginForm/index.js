@@ -1,42 +1,62 @@
 import React from 'react';
 import { Form, Button } from 'reactstrap';
-import Field from './Field';
+import { Field, reduxForm } from 'redux-form';
+import RenderField from './RenderField';
+import validate from './validate';
+import PropTypes from 'prop-types';
+import CustomAlert from 'view/components/CustomAlert';
 
 const LoadingText = () => (
   <React.Fragment>
     Проверяю{' '} 
-    <i className="fa fa-spinner fa-pulse"></i>
+    <i className="fa fa-spinner fa-pulse"/>
   </React.Fragment>
 );
 
-const LoginForm = ({ 
-  handleChange, 
+let LoginForm = ({
   handleSubmit,
-  credentials,
-  loading 
+  submitting,
+  error
 }) => (
-  <Form onSubmit={handleSubmit}>
-    <Field 
-      name="email"
-      type="email"
-      id="emailField"
-      handleChange={handleChange}
-      value={credentials.email}
-      placeholder="Электронная почта"
-    />
-    <Field 
-      name="password"
-      type="password"
-      id="passwordField"
-      handleChange={handleChange}
-      value={credentials.password}
-      placeholder="Пароль"
-    />
-    <Button 
-      color="primary"
-      disabled={loading}
-    >{loading ? <LoadingText /> : 'Войти'}</Button>
-  </Form>
+    <React.Fragment>
+      {
+        Boolean(error) ? (
+            <CustomAlert
+                isValidationErrors={true}
+                color={'danger'}
+                message={error}
+            />
+        ) : ( null )
+      }
+      <Form onSubmit={handleSubmit}>
+        <Field
+          name="email"
+          type="email"
+          id="emailField"
+          label="Электронная почта"
+          component={RenderField}
+        />
+        <Field
+          name="password"
+          type="password"
+          label="Пароль"
+          id="passwordField"
+          component={RenderField}
+        />
+        <Button
+          color="primary"
+          disabled={submitting}
+        >{submitting ? <LoadingText /> : 'Войти'}</Button>
+      </Form>
+    </React.Fragment>
 );
 
-export default LoginForm;
+LoginForm.propTypes = {
+  handleSubmit: PropTypes.func.isRequired
+};
+
+export default reduxForm({
+  form: 'loginForm',
+  validate
+})(LoginForm);
+

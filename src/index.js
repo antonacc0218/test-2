@@ -3,7 +3,7 @@ import { render } from 'react-dom';
 import configureStore from 'state/store';
 import Root from 'view/components/Root';
 import { authActions } from 'state/ducks/auth';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/css/bootstrap.css';
 
 const store = configureStore();
 

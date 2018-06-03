@@ -5,6 +5,11 @@ const loginSuccess = userId => ({
   userId
 });
 
+const loginFailure = globalError => ({
+  type: types.LOGIN_FAILURE,
+  globalError
+});
+
 const logout = () => {
   localStorage.removeItem('userId');
   return { type: types.LOGOUT };
@@ -12,5 +17,6 @@ const logout = () => {
 
 export default {
   loginSuccess,
+  loginFailure,
   logout
 };

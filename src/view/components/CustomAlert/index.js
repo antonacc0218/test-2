@@ -1,5 +1,8 @@
 import React from 'react';
 import { Alert } from 'reactstrap';
+import PropTypes from 'prop-types';
+import { clearSubmitErrors } from 'redux-form';
+import { connect } from 'react-redux';
 
 class CustomAlert extends React.Component {
   constructor(props) {
@@ -7,18 +10,13 @@ class CustomAlert extends React.Component {
     this.state = {
       visible: true
     };
-    this.onDismiss = this.onDismiss.bind(this);
   }
-  onDismiss() {
+  onDismiss = () => {
+    const { isValidationErrors, clearSubmitErrors } = this.props;
     this.setState({ visible: false });
-  }
-  static getDerivedStateFromProps(nextProps, prevState) {
-    if (!prevState.visible && nextProps.message) {
-      return {
-        visible: true
-      };
+    if (isValidationErrors) {
+      clearSubmitErrors();
     }
-    return null;
   }
   render() {
     const { color, message } = this.props;
@@ -27,7 +25,7 @@ class CustomAlert extends React.Component {
         color={color} 
         isOpen={this.state.visible} 
         toggle={this.onDismiss}
-        className="mt-4"
+        className="my-2"
       >
         {message}
       </Alert>
@@ -35,4 +33,15 @@ class CustomAlert extends React.Component {
   }
 }
 
-export default CustomAlert;
+CustomAlert.defaultValues = {
+  isValidationErrors: false
+};
+
+CustomAlert.propTypes = {
+  clearSubmitErrors: PropTypes.func,
+  isValidationErrors: PropTypes.bool,
+  color: PropTypes.string.isRequired,
+  message: PropTypes.string.isRequired
+};
+
+export default connect(null, {clearSubmitErrors})(CustomAlert);

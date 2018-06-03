@@ -1,26 +1,36 @@
 import api from './api';
-import types from './types';
-import { globalErrorActions } from 'state/ducks/globalError';
+import actions from './actions';
+import errorTypes from 'errorTypes';
+import { SubmissionError, change } from 'redux-form';
+
+function AuthError(message) {
+  this.name = 'AuthError';
+  this.message = message;
+  this.stack = (new Error()).stack;
+}
+
+AuthError.prototype = Object.create(Error.prototype);
 
 const login = credentials => dispatch => {
-  dispatch({ type: types.LOGIN_REQUEST });
   return api.login(credentials)
     .then(response => {
-      const data = response.data;
-      if (data.status === 'ok') {
-        const userId = data.data.id;
-        localStorage.setItem('userId', userId);
-        dispatch({ type: types.LOGIN_SUCCESS, userId });
-      } else if (data.status === 'err') {
-        dispatch({ 
-          type: types.LOGIN_FAILURE, 
-          error: data.message === 'wrong_email_or_password' ? 
-            'Неверная электронная почта или пароль' : data.message 
-        })
+      const { data: { id, message } } = response;
+      if (id) {
+        localStorage.setItem('userId', id);
+        dispatch(actions.loginSuccess(id));
+      } else {
+        dispatch(change('loginForm', 'password', ''));
+        throw new AuthError(errorTypes[message]);
       }      
     })
     .catch(error => {
-      dispatch(globalErrorActions.addGlobalError(error.response.data))
+      if (error instanceof AuthError) {
+        throw new SubmissionError({
+          _error: error.message
+        });
+      } else {
+        dispatch(actions.loginFailure(errorTypes.server_error));
+      }
     });
 };
 
