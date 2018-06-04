@@ -14,7 +14,7 @@ AuthError.prototype = Object.create(Error.prototype);
 const login = credentials => dispatch => {
   return api.login(credentials)
     .then(response => {
-      const { data: { id, message } } = response;
+      const { data: { data: { id, message } } } = response;
       if (id) {
         localStorage.setItem('userId', id);
         dispatch(actions.loginSuccess(id));
