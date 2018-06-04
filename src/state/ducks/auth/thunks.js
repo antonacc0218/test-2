@@ -14,11 +14,11 @@ AuthError.prototype = Object.create(Error.prototype);
 const login = credentials => dispatch => {
   return api.login(credentials)
     .then(response => {
-      const { data: { data: { id, message } } } = response;
-      if (id) {
-        localStorage.setItem('userId', id);
-        dispatch(actions.loginSuccess(id));
-      } else {
+      const { data: { status, message, data } } = response;
+      if (status === 'ok') {
+        localStorage.setItem('userId', data.id);
+        dispatch(actions.loginSuccess(data.id));
+      } else if (status === 'err') {
         dispatch(change('loginForm', 'password', ''));
         throw new AuthError(errorTypes[message]);
       }      

@@ -1,5 +1,6 @@
 import React from 'react';
 import './index.css';
+import PropTypes from 'prop-types';
 
 function ucFirst(str) {
   return str[0].toUpperCase() + str.slice(1);
@@ -17,7 +18,7 @@ const Social = ({ label, link }) => (
     </a>
 );
 
-Social.PropTypes = {
+Social.propTypes = {
   label: PropTypes.string.isRequired,
   link: PropTypes.string.isRequired
 };

@@ -1,34 +1,39 @@
 import api from './api';
-import types from './types';
-import { globalErrorActions } from 'state/ducks/globalError';
+import actions from './actions';
+import errorTypes from 'errorTypes';
 
 function reorderSocials(socials) {
-    let socialsSorted = [];
-    socials.forEach((social, index) => {
-        if (social.label === 'web') {
-            const webSocial = socials.splice(index, 1);
-            socialsSorted = [].concat(webSocial, socials);
-        }
-    });
+  let socialsSorted = [...socials];
+  let webSocial = null;
+  socialsSorted.forEach((social, index) => {
+    if (social.label === 'web') {
+      webSocial = socialsSorted.splice(index, 1)[0];
+    }
+  });
+  if (webSocial) {
+    socialsSorted.unshift(webSocial);
     return socialsSorted;
+  }
+  return socialsSorted;
 }
 
 const fetchProfileData = userId => dispatch => {
-  dispatch({ type: types.LOAD_PROFILE_DATA_REQUEST });
-  dispatch(globalErrorActions.removeGlobalError());
+  dispatch(actions.fetchProfileDataRequest());
   return api.fetchProfileData(userId)
-    .then(response => {
-      const { status, data, message } = response.data;
-      if (status === 'ok') {
-        dispatch({
-            type: types.LOAD_PROFILE_DATA_SUCCESS,
-            profileData: {...data, social: reorderSocials(data.social)}
-        });
-      } else if (status === 'err') {
-        dispatch(globalErrorActions.addGlobalError(message));
-      }
-    })
-    .catch(error => dispatch(globalErrorActions.addGlobalError(error.response.data)));
+      .then(response => {
+        console.log(response);
+        const {status, data} = response.data;
+        if (status === 'ok') {
+          const profileData = {...data, social: reorderSocials(data.social)};
+          dispatch(actions.fetchProfileDataSuccess(profileData));
+        } else if (status === 'err') {
+          dispatch(actions.fetchProfileDataFailure(errorTypes.server_error));
+        }
+      })
+      .catch(error => {
+        const globalError = error.response.data || errorTypes.server_error;
+        dispatch(actions.fetchProfileDataFailure(globalError));
+      });
 };
 
 export default {

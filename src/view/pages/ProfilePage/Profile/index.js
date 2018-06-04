@@ -1,28 +1,9 @@
 import React from 'react';
 import { Card, CardBody, CardImg, CardSubtitle } from 'reactstrap';
+import Socials from 'view/components/Socials';
+import PropTypes from 'prop-types';
 
-const socialStyle = {
-  width: 30,
-  height: 30,
-  borderRadius: '50%',
-  lineHeight: '30px'
-};
-
-function ucfirst(str) {
-  return str[0].toUpperCase() + str.slice(1);
-}
-
-const Profile = ({ profileData: { city, languages, social } }) => {
-  let socialSorted = [];
-  if (social) {
-    social.forEach((socialItem, index) => {
-      if (socialItem.label === 'web') {
-        const webSocial = social.splice(index, 1);
-        socialSorted = [].concat(webSocial, social);
-      }
-    });
-  }
-  return(
+const Profile = ({ profileData: { city, languages, social } }) => (
     <Card>
       <CardImg
         top 
@@ -30,9 +11,7 @@ const Profile = ({ profileData: { city, languages, social } }) => {
         src="https://placeholdit.imgix.net/~text?txtsize=33&txt=318%C3%97180&w=318&h=180"
       />
       <CardBody>
-        {
-          city && <CardSubtitle className="my-2">Город: { city }</CardSubtitle>
-        }
+        { city && <CardSubtitle className="my-2">Город: { city }</CardSubtitle> }
         {
           languages && (
             <CardSubtitle className="my-2">
@@ -40,7 +19,7 @@ const Profile = ({ profileData: { city, languages, social } }) => {
               {
                 languages.map(language => 
                   <div key={language} className="pl-2 my-1">
-                    <i className="fa fa-language"></i>
+                    <i className="fa fa-language"/>
                     {'  '}
                     { language }
                   </div>
@@ -53,29 +32,18 @@ const Profile = ({ profileData: { city, languages, social } }) => {
           social && (
             <CardSubtitle className="my-2">
               Ссылки:
-              <div className="pl-2 d-inline-block">
-                {
-                   socialSorted.map(socialItem =>
-                    <a 
-                      key={socialItem.label}
-                      href={socialItem.link} 
-                      alt={socialItem.label}
-                      title={ucfirst(socialItem.label)}
-                      style={socialStyle}
-                      target="_blank"
-                      className="text-white bg-primary mx-1 d-inline-block text-center"
-                    >
-                      <i className={`fa fa-${socialItem.label === 'web' ? 'globe' : socialItem.label}`}></i>
-                    </a>
-                  )
-                }
-              </div>
+              <Socials socials={social}/>
             </CardSubtitle>
           )
         }
       </CardBody>
     </Card>
-  );
+);
+
+Profile.propTypes = {
+  profileData: PropTypes.shape({
+
+  })
 };
 
 export default Profile;

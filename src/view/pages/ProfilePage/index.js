@@ -7,9 +7,12 @@ import { Container, Row, Col } from 'reactstrap';
 import { connect } from 'react-redux';
 import { profileThunks, profileSelectors } from 'state/ducks/profile';
 import { authSelectors } from 'state/ducks/auth';
-import { globalErrorSelectors } from 'state/ducks/globalError';
+import { globalErrorActions, globalErrorSelectors } from 'state/ducks/globalError';
 
 class ProfilePage extends React.Component {
+  componentWillMount() {
+    this.props.resetGlobalError();
+  }
   componentDidMount() {
     const { userId, fetchProfileData } = this.props; 
     fetchProfileData(userId);
@@ -51,4 +54,4 @@ const mapStateToProps = state => {
   };  
 };
 
-export default connect(mapStateToProps, {...profileThunks})(ProfilePage);
+export default connect(mapStateToProps, {...profileThunks, ...globalErrorActions})(ProfilePage);

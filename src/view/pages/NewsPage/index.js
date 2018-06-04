@@ -7,7 +7,7 @@ import { Container, Row, Col } from 'reactstrap';
 import { connect } from 'react-redux';
 import { newsThunks, newsSelectors } from 'state/ducks/news';
 import { globalErrorActions, globalErrorSelectors } from 'state/ducks/globalError';
-
+import PropTypes from 'prop-types';
 
 class NewsPage extends React.Component {
   componentWillMount() {
@@ -43,6 +43,12 @@ class NewsPage extends React.Component {
     );
   }
 }
+
+NewsPage.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  news: PropTypes.array.isRequired,
+  globalError: PropTypes.string
+};
 
 const mapStateToProps = state => ({
   news: newsSelectors.getNews(state),

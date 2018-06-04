@@ -1,11 +1,10 @@
 import axios from 'axios';
-
-const URL = 'https://mysterious-reef-29460.herokuapp.com/api/v1/user-info/';
+import API_URL from 'API_URL';
 
 const api = {
-    fetchProfileData(userId) {
-        return axios.get(`${URL}${userId}`);
-    }
+  fetchProfileData(userId) {
+    return axios.get(`${API_URL}/user-info/${userId}`);
+  }
 };
 
 export default api;

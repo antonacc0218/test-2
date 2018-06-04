@@ -19,8 +19,8 @@ class LoginPage extends React.Component {
     const { globalError } = this.props;
     return (
       <Container>
-        <Row>
-          <Col>
+        <Row className="justify-content-center">
+          <Col xs={12} sm={10} md={8} lg={6}>
             <Heading text="Войдите в свой аккаунт"/>
             {
               Boolean(globalError) ? (
@@ -30,10 +30,6 @@ class LoginPage extends React.Component {
                   />
               ) : ( null )
             }
-          </Col>
-        </Row>
-        <Row className="justify-content-center">
-          <Col xs={12} sm={10} md={8} lg={6}>
             <LoginForm
               onSubmit={this.handleSubmit}
             />
