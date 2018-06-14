@@ -1,6 +1,7 @@
 import React from 'react';
 import { Card, CardBody, CardImg, CardSubtitle } from 'reactstrap';
 import Socials from 'view/components/Socials';
+import LanguagesList from './LanguagesList';
 import PropTypes from 'prop-types';
 
 const Profile = ({ profileData: { city, languages, social } }) => (
@@ -13,20 +14,7 @@ const Profile = ({ profileData: { city, languages, social } }) => (
       <CardBody>
         { city && <CardSubtitle className="my-2">Город: { city }</CardSubtitle> }
         {
-          languages && (
-            <CardSubtitle className="my-2">
-              Знание языков: 
-              {
-                languages.map(language => 
-                  <div key={language} className="pl-2 my-1">
-                    <i className="fa fa-language"/>
-                    {'  '}
-                    { language }
-                  </div>
-                )
-              }
-            </CardSubtitle>
-          )
+          languages && <LanguagesList languages={languages} />
         }
         {
           social && (
@@ -42,7 +30,9 @@ const Profile = ({ profileData: { city, languages, social } }) => (
 
 Profile.propTypes = {
   profileData: PropTypes.shape({
-
+    city: PropTypes.string,
+    languages: PropTypes.array,
+    social: PropTypes.array
   })
 };
 
