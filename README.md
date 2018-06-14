@@ -2,8 +2,8 @@
 [Test task](https://vk.com/@maxpfrontend-testovoe-zadanie-2) implementation
 
 Credentials:    
-email: max@test.com  
-password: 12345
+email: ```max@test.com```   
+password: ```12345```
 
 To run this app locally clone or download repo,  
 ```cd``` to created folder,  
